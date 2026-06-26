@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seguimiento de Lectura — Clases 9 y 10 · Matemáticas II · UDI</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f5f5f0;color:#1a1a18;font-size:14px}
+.wrap{max-width:740px;margin:0 auto;padding:1.5rem 1rem 3rem}
+
+.print-bar{background:#fff;border:1px solid #d8d6cc;border-radius:8px;padding:10px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;gap:12px;flex-wrap:wrap}
+.print-bar span{font-size:12px;color:#666}
+.print-btn{font-size:13px;font-weight:600;padding:8px 18px;border-radius:6px;border:none;background:#f0a500;color:#fff;cursor:pointer;display:flex;align-items:center;gap:6px}
+.print-btn:hover{background:#d49000}
+
+.doc-header{border:1px solid #d8d6cc;border-radius:10px;padding:1.25rem 1.5rem;margin-bottom:1rem;background:#fff}
+.doc-title{font-size:17px;font-weight:700;color:#1a1a18;margin-bottom:3px}
+.doc-sub{font-size:13px;color:#555;margin-bottom:1rem}
+.meta-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px}
+.meta-item{background:#f5f5f0;border-radius:6px;padding:8px 10px;border:1px solid #e0ded8}
+.meta-lbl{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;letter-spacing:.04em}
+.meta-val{font-size:12px;font-weight:600;color:#1a1a18}
+
+.student-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.field-wrap{display:flex;flex-direction:column;gap:4px}
+.field-lbl{font-size:10px;font-weight:700;color:#555;text-transform:uppercase;letter-spacing:.04em}
+.field-box{border:1px solid #b0aea8;border-radius:6px;padding:8px 10px;min-height:34px;font-size:13px;color:#1a1a18;background:#fff;outline:none;cursor:text}
+.field-box:focus{border-color:#2563eb}
+.field-box:empty:before{content:attr(data-ph);color:#aaa}
+
+.sec{margin-bottom:1.5rem}
+.sec-header{display:flex;align-items:center;gap:8px;margin-bottom:0.75rem;padding-bottom:6px;border-bottom:1.5px solid #e0ded8}
+.sec-num{width:28px;height:28px;border-radius:50%;background:#dbeafe;color:#1d4ed8;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sec-title{font-size:14px;font-weight:700;color:#1a1a18}
+.sec-pts{font-size:11px;color:#888;margin-left:auto}
+
+.q-item{background:#fff;border:1px solid #d8d6cc;border-radius:10px;padding:1rem 1.25rem;margin-bottom:0.75rem}
+.q-text{font-size:13px;color:#1a1a18;line-height:1.65;margin-bottom:0.75rem}
+.q-pts{font-size:11px;color:#888;margin-bottom:6px;font-weight:600}
+
+.choices{display:flex;flex-direction:column;gap:6px}
+.choice{display:flex;align-items:flex-start;gap:10px;padding:8px 10px;border-radius:6px;border:1px solid #d8d6cc;cursor:pointer;transition:background .12s}
+.choice:hover{background:#f0f4ff}
+.choice.selected{border-color:#2563eb;background:#eff6ff}
+.choice-letter{width:22px;height:22px;border-radius:50%;border:1px solid #b0aea8;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#555}
+.choice.selected .choice-letter{background:#2563eb;color:#fff;border-color:#2563eb}
+.choice-text{font-size:13px;color:#1a1a18;line-height:1.5;padding-top:2px}
+
+.open-box{border:1px solid #b0aea8;border-radius:6px;padding:10px 12px;min-height:75px;font-size:13px;color:#1a1a18;background:#f9f9f7;outline:none;width:100%;line-height:1.65}
+.open-box:focus{border-color:#2563eb}
+.open-box:empty:before{content:attr(data-ph);color:#aaa}
+
+.exercise-box{border:1px solid #b0aea8;border-radius:6px;padding:10px 12px;min-height:110px;font-size:13px;color:#1a1a18;background:#f9f9f7;outline:none;width:100%;font-family:'Courier New',monospace;line-height:1.85}
+.exercise-box:focus{border-color:#2563eb}
+.exercise-box:empty:before{content:attr(data-ph);color:#aaa;font-family:Arial,sans-serif}
+
+.formula-hint{font-size:12px;color:#555;background:#f0f4ff;border:1px solid #c7d7f8;border-radius:6px;padding:7px 12px;margin-bottom:8px;font-family:'Courier New',monospace;line-height:1.8}
+
+.pts-row{display:flex;align-items:center;gap:8px;margin-top:10px;padding-top:8px;border-top:1px solid #e8e6e0}
+.pts-lbl{font-size:11px;color:#888;font-weight:600}
+.pts-box{width:44px;border:1px solid #b0aea8;border-radius:6px;padding:5px 7px;font-size:12px;text-align:center;background:#fff;outline:none}
+.pts-box:focus{border-color:#2563eb}
+.pts-total{font-size:11px;color:#888}
+
+.obs-box{border:1px solid #b0aea8;border-radius:6px;padding:9px 12px;min-height:55px;font-size:12px;color:#555;background:#f9f9f7;outline:none;width:100%}
+.obs-box:focus{border-color:#2563eb}
+.obs-box:empty:before{content:attr(data-ph);color:#aaa}
+
+.total-row{background:#fff;border:1.5px solid #2563eb;border-radius:10px;padding:1rem 1.25rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:0.5rem}
+.total-lbl{font-size:14px;font-weight:700;color:#1a1a18}
+.total-score{display:flex;align-items:center;gap:8px}
+.total-box{width:55px;border:1px solid #b0aea8;border-radius:6px;padding:7px 9px;font-size:16px;font-weight:700;text-align:center;background:#fff;outline:none}
+.total-box:focus{border-color:#2563eb}
+.denom{font-size:16px;font-weight:600;color:#555}
+
+.intro-box{background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:10px 14px;margin-bottom:1.25rem;font-size:12px;color:#166534;line-height:1.65}
+
+@media print{
+  .print-bar{display:none!important}
+  body{background:#fff}
+  .wrap{padding:0}
+  .q-item,.sec,.doc-header{page-break-inside:avoid}
+  .choice.selected{background:#eff6ff!important;border-color:#2563eb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .choice.selected .choice-letter{background:#2563eb!important;color:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .formula-hint{background:#f0f4ff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .intro-box{background:#f0fdf4!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .total-row{border-color:#2563eb!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="print-bar">
+  <span>Seguimiento de Lectura · Clases 9 y 10 · Matemáticas II · UDI &nbsp;·&nbsp; Completa y luego imprime o guarda como PDF</span>
+  <button class="print-btn" onclick="window.print()">🖨 Imprimir / Guardar PDF</button>
+</div>
+
+<div class="doc-header">
+  <div class="doc-title">Actividad de seguimiento de lectura</div>
+  <div class="doc-sub">Clases 9 y 10 — Costo, ingreso y utilidad marginal · Excedente del consumidor y del productor</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-lbl">Asignatura</div><div class="meta-val">Matemáticas II</div></div>
+    <div class="meta-item"><div class="meta-lbl">Programa</div><div class="meta-val">Administración de Empresas</div></div>
+    <div class="meta-item"><div class="meta-lbl">Docente</div><div class="meta-val">Eder Santiago Martelo Gómez</div></div>
+    <div class="meta-item"><div class="meta-lbl">Universidad</div><div class="meta-val">UDI</div></div>
+  </div>
+</div>
+
+<div class="student-grid">
+  <div class="field-wrap" style="grid-column:1/-1">
+    <div class="field-lbl">Nombre completo</div>
+    <div class="field-box" contenteditable="true" data-ph="Escribe tu nombre completo..."></div>
+  </div>
+  <div class="field-wrap">
+    <div class="field-lbl">Código estudiantil</div>
+    <div class="field-box" contenteditable="true" data-ph=""></div>
+  </div>
+  <div class="field-wrap">
+    <div class="field-lbl">Grupo</div>
+    <div class="field-box" contenteditable="true" data-ph=""></div>
+  </div>
+  <div class="field-wrap">
+    <div class="field-lbl">Fecha</div>
+    <div class="field-box" contenteditable="true" data-ph="dd/mm/aaaa"></div>
+  </div>
+  <div class="field-wrap">
+    <div class="field-lbl">Calificación</div>
+    <div class="field-box" contenteditable="true" data-ph=""></div>
+  </div>
+</div>
+
+<div class="intro-box">
+  <strong>Instrucciones:</strong> Lee cada pregunta con atención y responde con base en las lecturas de las Clases 9 y 10.
+  En selección múltiple, haz clic en la opción correcta. En preguntas abiertas y ejercicios, escribe directamente en el espacio sombreado.
+  Cuando termines, haz clic en <strong>Imprimir / Guardar PDF</strong> para entregar.
+</div>
+
+<!-- SECCIÓN 1 -->
+<div class="sec">
+  <div class="sec-header">
+    <div class="sec-num">1</div>
+    <div class="sec-title">Selección múltiple — Costo, ingreso y utilidad marginal</div>
+    <div class="sec-pts">12 pts</div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 1 · 2 pts</div>
+    <div class="q-text">¿Qué representa la integral definida de la función de costo marginal C'(x) entre los límites <em>a</em> y <em>b</em>?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">El costo total de producir <em>b</em> unidades.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">El cambio en el costo total al pasar de <em>a</em> a <em>b</em> unidades de producción.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">El costo fijo de la empresa.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">La derivada del costo total en el punto <em>b</em>.</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 2 · 2 pts</div>
+    <div class="q-text">Si U(x) = R(x) − C(x), ¿cuál es la expresión correcta para la utilidad marginal U'(x)?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">U'(x) = R(x) + C(x)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">U'(x) = R'(x) · C'(x)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">U'(x) = R'(x) − C'(x)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">U'(x) = C'(x) − R'(x)</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 3 · 2 pts</div>
+    <div class="q-text">Al recuperar la función de costo total C(x) a partir del costo marginal C'(x) mediante integral indefinida, ¿qué representa la constante K?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">El costo variable de la empresa.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">El ingreso total al nivel de producción cero.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">El costo fijo, es decir, C(0).</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">El número de unidades producidas.</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 4 · 2 pts</div>
+    <div class="q-text">Si R'(x) = 100 − 0,2x y se sabe que R(0) = 0, ¿cuál es la función de demanda p(x)?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">p(x) = 100 − 0,1x</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">p(x) = 100 − 0,2x</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">p(x) = 100x − 0,1x²</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">p(x) = 100 + 0,1x</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 5 · 2 pts</div>
+    <div class="q-text">¿Cuál de los siguientes errores frecuentes se menciona explícitamente en la Clase 9?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">Calcular el límite de una función marginal cuando x tiende a cero.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">Escribir +C en una integral definida.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">Aplicar la regla de la cadena al integrar.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">Usar límites negativos en la integral.</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 6 · 2 pts</div>
+    <div class="q-text">¿Qué mide la función marginal según la Clase 9?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">El costo fijo total acumulado.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">El cambio aproximado en una cantidad total por una unidad adicional producida o vendida.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">El precio de equilibrio en el mercado.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">El área bajo la curva de demanda.</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+</div>
+
+<!-- SECCIÓN 2 -->
+<div class="sec">
+  <div class="sec-header">
+    <div class="sec-num">2</div>
+    <div class="sec-title">Selección múltiple — Excedente del consumidor y del productor</div>
+    <div class="sec-pts">10 pts</div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 7 · 2 pts</div>
+    <div class="q-text">¿Qué representa el excedente del consumidor?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">El precio que el productor recibe por cada unidad vendida.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">La ganancia adicional que obtiene el productor por vender a un precio mayor al mínimo aceptado.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">El beneficio que obtienen los consumidores al pagar menos de lo que estaban dispuestos a pagar.</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">El área bajo la curva de oferta hasta el precio de equilibrio.</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 8 · 2 pts</div>
+    <div class="q-text">Para las funciones D(q) = 80 − 2q y S(q) = 20 + q, ¿cuál es el punto de equilibrio?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">(q₀, p₀) = (15, 50)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">(q₀, p₀) = (20, 40)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">(q₀, p₀) = (25, 30)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">(q₀, p₀) = (10, 60)</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 9 · 2 pts</div>
+    <div class="q-text">¿Cuál es la fórmula correcta del excedente del productor?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">EP = ∫₀^q₀ [D(q) − p₀] dq</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">EP = ∫₀^q₀ [S(q) − p₀] dq</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">EP = ∫₀^q₀ [p₀ − S(q)] dq</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">EP = ∫₀^q₀ [D(q) + S(q)] dq</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 10 · 2 pts</div>
+    <div class="q-text">¿Cómo se calcula el excedente total ET a partir de las curvas de demanda y oferta?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">ET = ∫₀^q₀ [D(q) − S(q)] dq</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">ET = D(q₀) · S(q₀)</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">ET = EC − EP</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">ET = ∫₀^∞ D(q) dq</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 11 · 2 pts</div>
+    <div class="q-text">En el ejemplo con D(q) = 100 − q² y S(q) = 20 + 3q, ¿cuánto vale el excedente del productor EP?</div>
+    <div class="choices">
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">a</div><div class="choice-text">EP = 1024/3</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">b</div><div class="choice-text">EP = 200</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">c</div><div class="choice-text">EP = 32</div></div>
+      <div class="choice" onclick="sel(this)"><div class="choice-letter">d</div><div class="choice-text">EP = 64</div></div>
+    </div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 2</div></div>
+  </div>
+</div>
+
+<!-- SECCIÓN 3 -->
+<div class="sec">
+  <div class="sec-header">
+    <div class="sec-num">3</div>
+    <div class="sec-title">Preguntas abiertas</div>
+    <div class="sec-pts">9 pts</div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 12 · 3 pts</div>
+    <div class="q-text">Explica con tus propias palabras la diferencia entre una función marginal y una función total, y cómo la integral definida conecta ambas.</div>
+    <div class="open-box" contenteditable="true" data-ph="Escribe tu respuesta aquí..."></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 13 · 3 pts</div>
+    <div class="q-text">¿Por qué es importante interpretar el resultado de una integral en contexto económico y no solo como un número? Usa un ejemplo de la Clase 9 o 10 para apoyar tu respuesta.</div>
+    <div class="open-box" contenteditable="true" data-ph="Escribe tu respuesta aquí..."></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Pregunta 14 · 3 pts</div>
+    <div class="q-text">Describe la conexión entre el concepto de "área entre curvas" (Clase 8) y el cálculo del excedente total en la Clase 10.</div>
+    <div class="open-box" contenteditable="true" data-ph="Escribe tu respuesta aquí..."></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+</div>
+
+<!-- SECCIÓN 4 -->
+<div class="sec">
+  <div class="sec-header">
+    <div class="sec-num">4</div>
+    <div class="sec-title">Ejercicios de aplicación</div>
+    <div class="sec-pts">9 pts</div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Ejercicio 15 · 3 pts</div>
+    <div class="q-text">Si C'(x) = 18 + 0,03x, calcula el cambio en el costo total cuando la producción pasa de 100 a 300 unidades. Muestra el planteamiento, el cálculo y la interpretación económica.</div>
+    <div class="formula-hint">ΔC = ∫₁₀₀³⁰⁰ C'(x) dx = ∫₁₀₀³⁰⁰ (18 + 0,03x) dx</div>
+    <div class="exercise-box" contenteditable="true" data-ph="Planteamiento, cálculo y resultado..."></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Ejercicio 16 · 3 pts</div>
+    <div class="q-text">Para D(q) = 60 − q y S(q) = 20 + q: (a) halla el punto de equilibrio (q₀, p₀); (b) calcula el excedente del consumidor; (c) calcula el excedente del productor.</div>
+    <div class="formula-hint">Equilibrio: D(q₀) = S(q₀)   |   EC = ∫₀^q₀ [D(q) − p₀] dq   |   EP = ∫₀^q₀ [p₀ − S(q)] dq</div>
+    <div class="exercise-box" contenteditable="true" data-ph="(a) Equilibrio:
+
+
+(b) Excedente del consumidor:
+
+
+(c) Excedente del productor:"></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+
+  <div class="q-item">
+    <div class="q-pts">Ejercicio 17 · 3 pts</div>
+    <div class="q-text">Una empresa tiene R'(x) = 80 − 0,04x y C'(x) = 25 + 0,01x. (a) Halla U'(x); (b) calcula el cambio en utilidad al pasar de 100 a 300 unidades; (c) escribe una interpretación administrativa del resultado.</div>
+    <div class="formula-hint">U'(x) = R'(x) − C'(x)   |   ΔU = ∫₁₀₀³⁰⁰ U'(x) dx</div>
+    <div class="exercise-box" contenteditable="true" data-ph="(a) U'(x) =
+
+
+(b) ΔU =
+
+
+(c) Interpretación:"></div>
+    <div class="pts-row"><div class="pts-lbl">Pts:</div><input class="pts-box" type="text" placeholder="—"><div class="pts-total">/ 3</div></div>
+  </div>
+</div>
+
+<!-- TOTAL -->
+<div class="total-row">
+  <div>
+    <div class="total-lbl">Calificación total</div>
+    <div style="font-size:12px;color:#888;margin-top:2px">Selección múltiple 22 pts · Preguntas abiertas 9 pts · Ejercicios 9 pts</div>
+  </div>
+  <div class="total-score">
+    <input class="total-box" type="text" placeholder="—">
+    <span class="denom">/ 40 pts</span>
+  </div>
+</div>
+
+<div class="q-item" style="margin-top:0.75rem">
+  <div style="font-size:12px;font-weight:700;color:#555;margin-bottom:6px">Observaciones del docente</div>
+  <div class="obs-box" contenteditable="true" data-ph="Escribe aquí las observaciones o retroalimentación..."></div>
+</div>
+
+</div>
+
+<script>
+function sel(el){
+  var parent=el.closest('.choices');
+  parent.querySelectorAll('.choice').forEach(function(c){c.classList.remove('selected');});
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>
